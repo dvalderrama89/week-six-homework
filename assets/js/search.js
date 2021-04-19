@@ -31,6 +31,9 @@ function renderForecast(data) {
     let city = data.city;
     let dayList = data.list;
 
+    // Clear out any old elements on a new search
+    $("#fiveDayForecast").empty();
+
     // Display the information that's at 12:00pm each day
     for (let index = 0; index < dayList.length; index++) {
         if (dayList[index].dt_txt.includes("12:00:00")) {
@@ -44,8 +47,25 @@ function renderForecastCard(dayObj) {
     let date = dayObj.dt_txt; // TODO: format this with moment
     let temp = dayObj.main.temp;
     let humidity = dayObj.main.humidity;
-    console.log(date);
-    console.log(temp);
-    console.log(humidity);
-    console.log("-----");
+    // console.log(moment(date).format("l"));
+    // console.log(temp);
+    // console.log(humidity);
+    // console.log("-----");
+
+    let dayTitle = moment(date).format("l");
+    let tempText = $("<p>").addClass("card-text").text(`Temp: ${temp} ℉`);
+    let humidityText = $("<p>").addClass("card-text").text(`Humidity: ${humidity}%`);
+
+    let newCardColumn = $("<div>").addClass("col");
+    let newCardElem = $("<div>").addClass("card");
+    let newCardBody = $("<div>").addClass("card-body");
+
+    newCardBody.append(dayTitle);
+    newCardBody.append(tempText);
+    newCardBody.append(humidityText);
+
+    newCardElem.append(newCardBody);
+    newCardColumn.append(newCardElem);
+
+    $("#fiveDayForecast").append(newCardColumn);
 }
