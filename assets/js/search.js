@@ -28,29 +28,27 @@ function getWeatherData(term) {
 }
 
 function renderForecast(data) {
-    let city = data.city;
+    let cityName = data.city.name;
     let dayList = data.list;
 
     // Clear out any old elements on a new search
+    $("#cityInfoContainer").empty();
     $("#fiveDayForecast").empty();
 
     // Display the information that's at 12:00pm each day
     for (let index = 0; index < dayList.length; index++) {
         if (dayList[index].dt_txt.includes("12:00:00")) {
-            renderForecastCard(dayList[index]);
+            renderForecastCard(cityName, dayList[index]);
         }
     }
 }
 
 // Contains all the data of a particular day at 12:00 pm
-function renderForecastCard(dayObj) {
-    let date = dayObj.dt_txt; // TODO: format this with moment
+function renderForecastCard(cityName, dayObj) {    
+    let date = dayObj.dt_txt;
     let temp = dayObj.main.temp;
     let humidity = dayObj.main.humidity;
-    // console.log(moment(date).format("l"));
-    // console.log(temp);
-    // console.log(humidity);
-    // console.log("-----");
+    let windSpeed = dayObj.wind.speed;
 
     let dayTitle = moment(date).format("l");
     let tempText = $("<p>").addClass("card-text").text(`Temp: ${temp} ℉`);
@@ -68,4 +66,19 @@ function renderForecastCard(dayObj) {
     newCardColumn.append(newCardElem);
 
     $("#fiveDayForecast").append(newCardColumn);
+
+    // Add info to main card (Note: UV was deprecated April 1st 2021)
+    if (dayTitle === moment().format("l")) {
+        let cardBody = $("<div>").addClass("card-body");
+        let cardTitle = $("<h5>").addClass("card-title").text(`${cityName} (${moment(date).format("l")})`);
+        let cardTemp = $("<p>").addClass("card-text").text(`Temperature: ${temp} ℉`);
+        let cardHumidity = $("<p>").addClass("card-text").text(`Humidity: ${humidity}%`)
+        let cardWindSpeed = $("<p>").addClass("card-text").text(`Wind speed: ${windSpeed} MPH`);
+
+        cardBody.append(cardTitle);
+        cardBody.append(cardTemp);
+        cardBody.append(cardHumidity);
+        cardBody.append(cardWindSpeed);
+        $("#cityInfoContainer").append(cardBody);
+    }
 }
