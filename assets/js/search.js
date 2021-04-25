@@ -28,7 +28,6 @@ function getWeatherData(term) {
 }
 
 function renderForecast(data) {
-    console.log(data);
     let cityName = data.city.name;
     let dayList = data.list;
 
@@ -49,8 +48,6 @@ function renderForecast(data) {
         }
     }
 
-    console.log(daysReturnedByAPI);
-
     let dayNotRendered = false;
     // Display the information that's at 12:00pm each day
     
@@ -70,6 +67,7 @@ function renderForecastCard(cityName, dayObj, index) {
     let temp = dayObj.main.temp;
     let humidity = dayObj.main.humidity;
     let windSpeed = dayObj.wind.speed;
+    let weatherType = dayObj.weather[0].main.toLowerCase();
 
 
     // Add info to main card at the top if it's the first day (Note: UV was deprecated April 1st 2021)
@@ -79,12 +77,14 @@ function renderForecastCard(cityName, dayObj, index) {
         let cardTemp = $("<p>").addClass("card-text").text(`Temperature: ${Math.floor(temp)} ℉`);
         let cardHumidity = $("<p>").addClass("card-text").text(`Humidity: ${humidity}%`);
         let cardWindSpeed = $("<p>").addClass("card-text").text(`Wind speed: ${windSpeed} MPH`);
+        let imgElem = $("<img>").attr("src", `assets/images/${weatherType}.webp`);
 
         cardBody.append(cardTitle);
+        cardBody.append(imgElem);
         cardBody.append(cardTemp);
         cardBody.append(cardHumidity);
         cardBody.append(cardWindSpeed);
-        
+
         $("#cityInfoContainer").empty();
         $("#cityInfoContainer").append(cardBody);
     } else {
@@ -92,12 +92,14 @@ function renderForecastCard(cityName, dayObj, index) {
         let dayTitle = $("<h5>").addClass("card-title").text(moment(date).format("l"));
         let tempText = $("<p>").addClass("card-text").text(`Temp: ${Math.floor(temp)} ℉`);
         let humidityText = $("<p>").addClass("card-text").text(`Humidity: ${humidity}%`);
+        let imgElem = $("<img>").attr("src", `assets/images/${weatherType}.webp`);
 
         let newCardColumn = $("<div>").addClass("col");
         let newCardElem = $("<div>").addClass("card");
         let newCardBody = $("<div>").addClass("card-body bg-primary text-white");
 
         newCardBody.append(dayTitle);
+        newCardBody.append(imgElem);
         newCardBody.append(tempText);
         newCardBody.append(humidityText);
 
