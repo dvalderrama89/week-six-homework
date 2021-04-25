@@ -15,12 +15,9 @@ function appendToSearchHistory(term) {
 }
 
 function getWeatherData(term) {
-    let key1 = "facb73ff9b05fe";
-    let key2 = "5bd7b6e20c2d168cb7";
-    let a = "app";
-    let i = "id";
-    let d = `${a}${i}=${key1}${key2}`;
-    let apiURL = `http://api.openweathermap.org/data/2.5/forecast?q=${term}&${d}&units=imperial`;
+    let enc = "ZmFjYjczZmY5YjA1ZmU1YmQ3YjZlMjBjMmQxNjhjYjc=";
+    let dec = atob(enc);
+    let apiURL = `http://api.openweathermap.org/data/2.5/forecast?q=${term}&appid=${dec}&units=imperial`;
 
     fetch(apiURL)
     .then(response => response.json())
